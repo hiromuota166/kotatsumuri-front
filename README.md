@@ -7,12 +7,15 @@
 以下のドキュメントに沿って進めていきます。
 https://reactnative.dev/docs/environment-setup
 
-クローン
-`git clone https://github.com/hiromuota166/kotatsumuri-front.git`
+**クローン**
 
-ライブラリインストール
-`npm install`
+```git clone https://github.com/hiromuota166/kotatsumuri-front.git```
 
-ローカル実行
-`npm run ios`
+**ライブラリインストール**
+
+```npm install```
+
+**ローカル実行**
+
+```npm run ios```
 (windowsの方はスマホがiosならExpo Goをインストールすると実機でテストができます)
