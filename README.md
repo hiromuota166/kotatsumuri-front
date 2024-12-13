@@ -8,6 +8,10 @@
 
 ```git clone https://github.com/hiromuota166/kotatsumuri-front.git```
 
+**ディレクトリ変更**
+
+```cd kotatsumuri-front```
+
 **ライブラリインストール**
 
 ```npm install```
@@ -15,4 +19,5 @@
 **ローカル実行**
 
 ```npm run ios```
+
 (windowsの方はスマホがiosならExpo Goをインストールすると実機でテストができます)
