@@ -18,6 +18,6 @@
 
 **ローカル実行**
 
-```npm run ios```
+```npx expo start```
 
 (windowsの方はスマホがiosならExpo Goをインストールすると実機でテストができます)
