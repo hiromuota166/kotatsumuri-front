@@ -4,9 +4,6 @@
 
 ## 環境構築方法
 
-以下のドキュメントに沿って進めていきます。
-https://reactnative.dev/docs/environment-setup
-
 **クローン**
 
 ```git clone https://github.com/hiromuota166/kotatsumuri-front.git```
