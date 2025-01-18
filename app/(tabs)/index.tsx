@@ -1,74 +1,124 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, Dimensions, Keyboard } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { plant } from '@/types/plant';
+import SearchBar from '@/components/SearchBar';
+import { useRouter } from 'expo-router';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const { width } = Dimensions.get('window'); // 画面の幅を取得
 
-export default function HomeScreen() {
+
+const Search = () => {
+  const [query, setQuery] = useState<string>(''); // 検索バーの入力値
+  const [data, setData] = useState<plant | null>(null); // plant型の配列
+  const [loading, setLoading] = useState<boolean>(false); // ローディング状態
+  const [focus, setFocus] = useState<boolean>(false); // フォーカス状態
+  const router = useRouter();
+
+  const fetchSearchResults = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3000/plants?query=${query}`);
+      const json = await response.json();
+      setData(json as plant);
+      if (data != null) {
+        router.push({
+          pathname: '/search/detail',
+          params: { data: JSON.stringify(data) },
+        });      
+      }  
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={{width}}>
+      <StatusBar barStyle="dark-content" />
+      <View style={[styles.container, {width}]}>
+        <View style={styles.zstack}>
+          <View style={styles.searchContent}>
+            {/* 検索バー */}
+            <SearchBar
+              placeholder="植物を検索"
+              value={query}
+              onChangeText={setQuery}
+              onSubmit={fetchSearchResults}
+              onFocas={() => setFocus(true)}
+              onBlur={() => setFocus(false)}
+            />
+            {focus && (
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => Keyboard.dismiss()}
+              >
+                <Text style={styles.searchButtonText}>キャンセル</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+        {/* ローディング中の表示 */}
+        {loading && <Text>Loading...</Text>}
+
+        {/* データを文字列として表示 */}
+        <ScrollView>
+          <Text style={styles.dataText}>
+            {data ? JSON.stringify(data, null, 2) : 'No data to display'}
+          </Text>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {   
+    justifyContent: 'center',
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+    width: '100%',
+    paddingTop: 0, // ステータスバーに被せるためにパディングを0に設定
+    flexDirection: 'column',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  searchBar: {
+    height: 30,
+    width: '60%',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
     position: 'absolute',
+    paddingHorizontal: 0,
   },
+  cancelButton: {
+  },
+  searchButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  dataText: {
+    fontFamily: 'monospace', // テキストを整列させるためにモノスペースフォントを使用
+    fontSize: 14,
+    backgroundColor: '#f4f4f4',
+    borderRadius: 8,
+    padding: 16,
+    paddingTop: 500,
+  },
+  zstack: {
+    height: 150,
+    backgroundColor: '#68A98A',
+    justifyContent: 'center',
+    ...StyleSheet.absoluteFillObject,
+  },
+  searchContent: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+  }
 });
+
+export default Search;
