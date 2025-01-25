@@ -64,7 +64,9 @@ const Search = () => {
   const getSearchHistory = () => {
     db.then(database => {
       database.getAllAsync(`SELECT * FROM  "History";`).then(result => {
-        setSearchHistory(result.map((item: any) => item.query));
+        if (result.length != 0) {
+          setSearchHistory(result.map((item: any) => item.query));
+        } 
       })
     })
   };
@@ -121,13 +123,12 @@ const Search = () => {
             </Animated.View>
             {focus && (
               <TouchableOpacity
-                style={styles.cancelButton}
                 onPress={() => {
                   Keyboard.dismiss();
                   handleBlur(); // キャンセル時もフォーカスを外す
                 }}
               >
-                <Text style={styles.searchButtonText}>キャンセル</Text>
+                <Text style={styles.cancelButtonText}>キャンセル</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -150,7 +151,9 @@ const Search = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center', // 垂直方向に中央揃え
 
-              }}>
+              }}
+                key={index}
+              >
                 <TouchableOpacity
                   onPress={() => {
                     router.push({
@@ -199,13 +202,12 @@ const styles = StyleSheet.create({
     height: 150,
     borderTopWidth: 1,
   },
-  cancelButton: {
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  searchButtonText: {
+  cancelButtonText: {
     color: '#fff',
     fontSize: 16,
+    position: 'absolute',
+    left: -90,
+    top: -10,
   },
   dataText: {
     fontFamily: 'monospace',
@@ -223,7 +225,6 @@ const styles = StyleSheet.create({
   },
   searchContent: {
     flexDirection: 'row',
-    width: '100%',
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingLeft: 30,
