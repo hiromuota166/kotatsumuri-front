@@ -1,19 +1,81 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, Dimensions, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { plant } from '@/types/plant';
 import SearchBar from '@/components/SearchBar';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
+import * as SQLite from 'expo-sqlite';
+import * as FileSystem from 'expo-file-system';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const { width } = Dimensions.get('window'); // 画面の幅を取得
 
 const Search = () => {
   const [query, setQuery] = useState<string>(''); // 検索バーの入力値
-  const [data, setData] = useState<plant | null>(null); // plant型の配列
-  const [loading, setLoading] = useState<boolean>(false); // ローディング状態
   const [focus, setFocus] = useState<boolean>(false); // フォーカス状態
+  const [searchHistory, setSearchHistory] = useState<string[]>([]); // 検索履歴
   const router = useRouter();
+  const db = SQLite.openDatabaseAsync('searchSql.db');
 
+  useFocusEffect(
+    useCallback(() => {
+      getSearchHistory();
+    }, []
+    ));
+
+  useEffect(() => {
+    createSearchHistoryTable();
+    const databasePath = `${FileSystem.documentDirectory}SQLite/searchSql.db`;
+    console.log('Database path:', databasePath);
+  }, []);
+
+
+  // expo-sqliteを使って検索クエリを保存するテーブルを作成する
+  const createSearchHistoryTable = () => {
+    db.then(database => {
+      database.execAsync(
+        `CREATE TABLE IF NOT EXISTS History (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          query TEXT NOT NULL
+        );`
+      ).then(result => {
+        console.log('Created search history table:', result);
+      }).catch(error => {
+        console.error('Failed to create search history table:', error);
+      });
+    });
+  }
+
+  // expo-sqliteを使って検索クエリを保存する
+  const saveSearchHistory = (query: string) => {
+    db.then(database => {
+      database.runAsync(
+        `INSERT INTO History (query)
+        SELECT ?
+         WHERE NOT EXISTS (
+         SELECT 1 FROM History WHERE query = ?
+      );
+         `, [query, query]
+      )
+    });
+  };
+
+  // 検索履歴を取得する
+  const getSearchHistory = () => {
+    db.then(database => {
+      database.getAllAsync(`SELECT * FROM  "History";`).then(result => {
+        setSearchHistory(result.map((item: any) => item.query));
+      })
+    })
+  };
+
+  const deleteSearchHistory = (query: string) => {
+    db.then(database => {
+      database.runAsync(
+        `DELETE FROM History WHERE query = ?;`, [query]
+      )
+    });
+  }
   const barWidth = useRef(new Animated.Value(240)).current; // 初期幅
 
   const handleFocus = () => {
@@ -35,7 +97,7 @@ const Search = () => {
   };
 
   return (
-    <SafeAreaView style={[ styles.safeAreaView, {width}]}>
+    <SafeAreaView style={[styles.safeAreaView, { width }]}>
       <StatusBar barStyle="dark-content" />
       <View style={[styles.container, { width }]}>
         <View style={styles.zstack}>
@@ -47,6 +109,7 @@ const Search = () => {
                 value={query}
                 onChangeText={setQuery}
                 onSubmit={() => {
+                  saveSearchHistory(query);
                   router.push({
                     pathname: '/search/detail',
                     params: { data: JSON.stringify(query) },
@@ -70,6 +133,58 @@ const Search = () => {
           </View>
         </View>
       </View>
+      <View style={styles.historyContainer}>≈
+        <Text style={{
+          paddingLeft: 25,
+          paddingTop: 30,
+          fontSize: 35,
+          fontWeight: 'bold',
+        }}>
+          検索履歴
+        </Text>
+        <ScrollView>
+          {
+            searchHistory.map((item, index) =>
+              <View style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center', // 垂直方向に中央揃え
+
+              }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push({
+                      pathname: '/search/detail',
+                      params: { data: JSON.stringify(item) },
+                    });
+                  }}
+                >
+                <Text style={{
+                  paddingLeft: 25,
+                  paddingTop: 30,
+                  fontSize: 20,
+                }}
+                >{item}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    deleteSearchHistory(item);
+                    getSearchHistory();
+                  }}
+                >
+                  <Text style={{
+                  paddingRight: 25,
+                  paddingTop: 30,
+                    fontSize: 30,
+                  }}
+                  >×</Text>
+                </TouchableOpacity>
+              </View>
+            )
+          }
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -81,13 +196,8 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    justifyContent: 'center',
-    flex: 1,
-    padding: 16,
-    backgroundColor: '##FFFBF3',
-    width: '100%',
-    paddingTop: 0,
-    flexDirection: 'column',
+    height: 150,
+    borderTopWidth: 1,
   },
   cancelButton: {
     paddingHorizontal: 10,
@@ -109,12 +219,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#68A98A',
     justifyContent: 'center',
     ...StyleSheet.absoluteFillObject,
+    borderBottomWidth: 1,
   },
   searchContent: {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
     paddingHorizontal: 10,
+    paddingLeft: 30,
+  },
+  historyContainer: {
+    flex: 1,
+    position: 'relative',
+    padding: 10,
   },
 });
 
