@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useSearchParams } from 'expo-router/build/hooks';
 import { plant } from '@/types/plant';
+
 
 
 
@@ -10,8 +11,6 @@ const Detail = () => {
 
   const [data, setData] = useState<plant | null>(null); // plant型の配列
   const [loading, setLoading] = useState<boolean>(false); // ローディング状態
-  const [focus, setFocus] = useState<boolean>(false); // フォーカス状態
-  const router = useRouter();
 
   const rawQuery = useSearchParams().get('data');
   const query = rawQuery?.replace(/^"|"$/g, '') || ''; // ダブルクォーテーションを削除
@@ -40,6 +39,14 @@ const Detail = () => {
     // コンポーネントが表示されたときに実行される処理
     fetchSearchResults();
   }, []);
+
+  if (loading){
+    return (
+      <SafeAreaView style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
