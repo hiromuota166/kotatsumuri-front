@@ -11,7 +11,7 @@ const Login = () => {
         // Handle login logic here
         console.log('Email:', email);
         console.log('Password:', password);
-        router.push({ pathname: '../(tabs)' });
+        router.replace({ pathname: '../(tabs)' });
     };
 
     return (
