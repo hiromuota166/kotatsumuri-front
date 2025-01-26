@@ -29,8 +29,11 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <Stack initialRouteName="index">
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/search/index" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/search/detail" options={{ headerShown: true ,  title: '詳細' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
