@@ -34,6 +34,8 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="screens/search/index" options={{ headerShown: false }} />
         <Stack.Screen name="screens/search/detail" options={{ headerShown: true ,  title: '詳細' }} />
+        <Stack.Screen name="screens/signUp/index" options={{ headerShown: true ,  title: '新規登録' }} />
+        <Stack.Screen name="screens/signUp/settingProfile" options={{ headerShown: false ,  title: 'プロフィール設定' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
