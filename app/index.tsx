@@ -28,7 +28,7 @@ const Login = () => {
         />
         <Text
         style={{
-            fontSize: 24,
+            fontSize: 38,
             marginBottom: 16,
             textAlign: 'center',
             fontWeight: 'bold',
@@ -36,6 +36,16 @@ const Login = () => {
             top: 180,
         }}
         >GardenMaster</Text>
+                <Text
+        style={{
+            fontSize: 16,
+            marginBottom: 16,
+            textAlign: 'center',
+            fontWeight: 'bold',
+            color: 'green',
+            top: 180,
+        }}
+        >あなたのガーデニングをより快適に</Text>
 
         <TouchableOpacity
         onPress={() => router.replace({ pathname: '../(tabs)' })}
@@ -46,7 +56,7 @@ const Login = () => {
                 padding: 10,
                 margin: 10,
                 borderRadius: 5,
-                top: 280,
+                top: 260,
                 width: 200,
                 height: 60,
                 alignSelf: 'center',
@@ -63,6 +73,7 @@ const Login = () => {
             >
                 Lineログイン
             </Text>
+            
             </View>
         </TouchableOpacity>
        </View>
