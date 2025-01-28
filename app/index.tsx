@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {
+    View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView,
+    ScrollView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard,
+} from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 
 const Login = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [focus, setFocus] = useState(false);
 
     const handleLogin = () => {
         // Handle login logic here
@@ -14,68 +21,98 @@ const Login = () => {
     };
 
     return (
-       <View
-       style={styles.container}
-       >
-        <Image
-            source={require('../assets/images/logo.png')}
-            style={{ width: 150,
-                 height: 150 ,
-                    alignSelf: 'center',
-                    top: 150,
-                }}
-        />
-        <Text
-        style={{
-            fontSize: 38,
-            marginBottom: 16,
-            textAlign: 'center',
-            fontWeight: 'bold',
-            color: 'green',
-            top: 180,
-        }}
-        >GardenMaster</Text>
-                <Text
-        style={{
-            fontSize: 16,
-            marginBottom: 16,
-            textAlign: 'center',
-            fontWeight: 'bold',
-            color: 'green',
-            top: 180,
-        }}
-        >あなたのガーデニングをより快適に</Text>
-
-        <TouchableOpacity
-        onPress={handleLogin}
-        >
-            <View
-            style={{
-                backgroundColor: 'green',
-                padding: 10,
-                margin: 10,
-                borderRadius: 5,
-                top: 260,
-                width: 200,
-                height: 60,
-                alignSelf: 'center',
-            }}
+        // <KeyboardAvoidingView
+        // behavior="padding" // キーボードが表示された時に、画面を上にスクロールさせる
+        //     style={{flex: 1}}
+        //     accessible={false}
+        // >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} 
+            style={{ backgroundColor: '#000000' }}
             >
-            <Text
-            style={{
-                color: 'white',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                fontSize: 20,
-                marginTop: 10,
-            }}
-            >
-                Lineログイン
-            </Text>
-            
-            </View>
-        </TouchableOpacity>
-       </View>
+                    <View
+                        style={styles.container}
+                    >
+                        <Image
+                            source={require('../assets/images/logo.png')}
+                            style={{
+                                width: 150,
+                                height: 150,
+                                alignSelf: 'center',
+                                top: 150,
+                            }}
+                        />
+                        <Text
+                            style={{
+                                fontSize: 38,
+                                marginBottom: 16,
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                color: 'green',
+                                top: 180,
+                            }}
+                        >GardenMaster</Text>
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                marginBottom: 16,
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                color: 'green',
+                                top: 180,
+                            }}
+                        >あなたのガーデニングをより快適に</Text>
+                        <View
+                            style={{
+                                top: 200,
+                                alignItems: 'center'
+                            }}
+                        >
+                            <TextInput
+                                placeholder="メールアドレス"
+                                style={styles.input}
+                                value={email}
+                                onChangeText={setEmail}
+                                keyboardType="email-address"
+                            />
+                            <TextInput
+                                placeholder="パスワード"
+                                style={styles.input}
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry
+                            />
+                        </View>
+                        <TouchableOpacity
+                            onPress={handleLogin}
+                            style={{width: 200, alignSelf: 'center', top: 250}}
+                        >
+                            <View
+                                style={{
+                                    backgroundColor: 'green',
+                                    padding: 10,
+                                    margin: 10,
+                                    borderRadius: 10,
+                                    width: 200,
+                                    height: 60,
+                                    alignSelf: 'center',
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: 'white',
+                                        textAlign: 'center',
+                                        fontWeight: 'bold',
+                                        fontSize: 20,
+                                        marginTop: 10,
+                                    }}
+                                >
+                                    ログイン
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+            </TouchableWithoutFeedback>
+        //  </KeyboardAvoidingView>
     );
 };
 
@@ -90,11 +127,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     input: {
-        height: 40,
+        height: 50,
         borderColor: 'gray',
         borderWidth: 1,
         marginBottom: 12,
         paddingHorizontal: 8,
+        width: 300,
+        borderRadius: 10,
+        marginTop: 10,
     },
 });
 
