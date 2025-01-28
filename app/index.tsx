@@ -7,17 +7,27 @@ import {
     Keyboard,
 } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const Login = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [focus, setFocus] = useState(false);
+    const [error, setError] = useState('');
+    
+    const handleLogin = async () => {
+        try {
+           await signInWithEmailAndPassword(auth, email, password)
+           router.replace({ pathname: '../(tabs)' });
+        } catch (error) {
+            setError("メールアドレスまたはパスワードが間違っています");
+        }
+    };
 
-    const handleLogin = () => {
-        // Handle login logic here
-        // 成功したらタブ画面に遷移
-        router.replace({ pathname: '../(tabs)' });
+    const handleSignUp = () => {
+        router.push({ pathname: '../screens/signUp' });
     };
 
     return (
@@ -61,6 +71,19 @@ const Login = () => {
                                 top: 180,
                             }}
                         >あなたのガーデニングをより快適に</Text>
+                        <View>
+                            <Text
+                                style={{
+                                    color: 'red',
+                                    textAlign: 'center',
+                                    fontWeight: 'bold',
+                                    fontSize: 16,
+                                    top: 200,
+                                }}
+                            >
+                                {error}
+                            </Text>
+                        </View>
                         <View
                             style={{
                                 top: 200,
@@ -107,6 +130,33 @@ const Login = () => {
                                     }}
                                 >
                                     ログイン
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={handleSignUp}
+                            style={{width: 200, alignSelf: 'center', top: 250}}
+                        >
+                            <View
+                                style={{
+                                    padding: 10,
+                                    margin: 10,
+                                    borderRadius: 10,
+                                    width: 200,
+                                    height: 60,
+                                    alignSelf: 'center',
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: 'green',
+                                        textAlign: 'center',
+                                        fontWeight: 'bold',
+                                        fontSize: 16
+                                    }}
+                                >
+                                    初めての方はこちら
                                 </Text>
                             </View>
                         </TouchableOpacity>
