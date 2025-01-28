@@ -9,8 +9,7 @@ const Login = () => {
 
     const handleLogin = () => {
         // Handle login logic here
-        console.log('Email:', email);
-        console.log('Password:', password);
+        // 成功したらタブ画面に遷移
         router.replace({ pathname: '../(tabs)' });
     };
 
@@ -48,7 +47,7 @@ const Login = () => {
         >あなたのガーデニングをより快適に</Text>
 
         <TouchableOpacity
-        onPress={() => router.replace({ pathname: '../(tabs)' })}
+        onPress={handleLogin}
         >
             <View
             style={{
