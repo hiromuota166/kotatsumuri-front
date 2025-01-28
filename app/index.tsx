@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 
 const Login = () => {
@@ -15,33 +15,64 @@ const Login = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Login</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            <Button title="Login" onPress={handleLogin} />
-        </View>
+       <View
+       style={styles.container}
+       >
+        <Image
+            source={require('../assets/images/logo.png')}
+            style={{ width: 150,
+                 height: 150 ,
+                    alignSelf: 'center',
+                    top: 150,
+                }}
+        />
+        <Text
+        style={{
+            fontSize: 24,
+            marginBottom: 16,
+            textAlign: 'center',
+            fontWeight: 'bold',
+            color: 'green',
+            top: 180,
+        }}
+        >GardenMaster</Text>
+
+        <TouchableOpacity
+        onPress={() => router.replace({ pathname: '../(tabs)' })}
+        >
+            <View
+            style={{
+                backgroundColor: 'green',
+                padding: 10,
+                margin: 10,
+                borderRadius: 5,
+                top: 280,
+                width: 200,
+                height: 60,
+                alignSelf: 'center',
+            }}
+            >
+            <Text
+            style={{
+                color: 'white',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: 20,
+                marginTop: 10,
+            }}
+            >
+                Lineログイン
+            </Text>
+            </View>
+        </TouchableOpacity>
+       </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        padding: 16,
+        backgroundColor: '#fff',
     },
     title: {
         fontSize: 24,
