@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import {
-    View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView,
-    ScrollView,
-    Platform,
+    View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity,
     TouchableWithoutFeedback,
     Keyboard,
     Alert,
@@ -25,9 +23,10 @@ const signUp = () => {
         try {
             const auth = getAuth();
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log(userCredential);
             router.replace({ pathname: './signUp/settingProfile' });
         } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
+            if ((error as any).code === 'auth/email-already-in-use') {
                 Alert.alert("エラー", 'このメールアドレスは既に使用されています');
             } else {
                 Alert.alert("エラー", 'エラーが発生しました');

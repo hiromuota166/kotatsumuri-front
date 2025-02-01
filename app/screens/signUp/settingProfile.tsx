@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import apiClient from '../../api/';
+import {updateUser} from '../../api/user';
 
-const SettingProfile = ({ navigation }) => {
+const SettingProfile = () => {
     const [username, setUsername] = useState('');
     const router = useRouter();
     const handleRegister = () => {
@@ -13,7 +15,9 @@ const SettingProfile = ({ navigation }) => {
             return;
         }
         // 登録処理をここに追加
-        router.replace('../../(tabs)');
+        updateUser(username).then(() => {
+            router.replace({ pathname: '../../(tabs)' });
+        });
     };
 
     return (
