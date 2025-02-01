@@ -1,41 +1,40 @@
 import React, { useState } from 'react';
 import {
-    View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView,
-    ScrollView,
-    Platform,
+    View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity,
     TouchableWithoutFeedback,
     Keyboard,
+    Alert,
 } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-const Login = () => {
+const signUp = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [focus, setFocus] = useState(false);
-    const [error, setError] = useState('');
+    const [errormessage, setError] = useState('');
     
-    const handleLogin = async () => {
+    const handleSignUp = async () => {
+        if (!email || !password) {
+            Alert.alert('エラー', 'メールアドレスとパスワードを入力してください。');
+            return;
+        }
         try {
-           await signInWithEmailAndPassword(auth, email, password)
-           router.replace({ pathname: '../(tabs)' });
+            const auth = getAuth();
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log(userCredential);
+            router.replace({ pathname: './signUp/settingProfile' });
         } catch (error) {
-            setError("メールアドレスまたはパスワードが間違っています");
+            if ((error as any).code === 'auth/email-already-in-use') {
+                Alert.alert("エラー", 'このメールアドレスは既に使用されています');
+            } else {
+                Alert.alert("エラー", 'エラーが発生しました');
+            }
         }
     };
 
-    const handleSignUp = () => {
-        router.push({ pathname: '../screens/signUp' });
-    };
-
     return (
-        // <KeyboardAvoidingView
-        // behavior="padding" // キーボードが表示された時に、画面を上にスクロールさせる
-        //     style={{flex: 1}}
-        //     accessible={false}
-        // >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} 
             style={{ backgroundColor: '#000000' }}
             >
@@ -43,50 +42,37 @@ const Login = () => {
                         style={styles.container}
                     >
                         <Image
-                            source={require('../assets/images/logo.png')}
+                            source={require('../../../assets/images/logo.png')}
                             style={{
-                                width: 150,
-                                height: 150,
+                                width: 100,
+                                height: 100,
                                 alignSelf: 'center',
-                                top: 150,
+                                top: 80,
                             }}
                         />
                         <Text
                             style={{
-                                fontSize: 38,
-                                marginBottom: 16,
+                                fontSize: 28,
+                                marginBottom: 12,
                                 textAlign: 'center',
                                 fontWeight: 'bold',
                                 color: 'green',
-                                top: 180,
+                                top: 110,
                             }}
                         >GardenMaster</Text>
                         <Text
                             style={{
-                                fontSize: 16,
-                                marginBottom: 16,
+                                fontSize: 12,
+                                marginBottom: 12,
                                 textAlign: 'center',
                                 fontWeight: 'bold',
                                 color: 'green',
-                                top: 180,
+                                top: 110,
                             }}
                         >あなたのガーデニングをより快適に</Text>
-                        <View>
-                            <Text
-                                style={{
-                                    color: 'red',
-                                    textAlign: 'center',
-                                    fontWeight: 'bold',
-                                    fontSize: 16,
-                                    top: 200,
-                                }}
-                            >
-                                {error}
-                            </Text>
-                        </View>
                         <View
                             style={{
-                                top: 200,
+                                top: 130,
                                 alignItems: 'center'
                             }}
                         >
@@ -98,7 +84,7 @@ const Login = () => {
                                 keyboardType="email-address"
                             />
                             <TextInput
-                                placeholder="パスワード"
+                                placeholder="パスワード(6文字以上)"
                                 style={styles.input}
                                 value={password}
                                 onChangeText={setPassword}
@@ -106,8 +92,8 @@ const Login = () => {
                             />
                         </View>
                         <TouchableOpacity
-                            onPress={handleLogin}
-                            style={{width: 200, alignSelf: 'center', top: 250}}
+                            onPress={handleSignUp}
+                            style={{width: 200, alignSelf: 'center', top: 180}}
                         >
                             <View
                                 style={{
@@ -129,34 +115,7 @@ const Login = () => {
                                         marginTop: 10,
                                     }}
                                 >
-                                    ログイン
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            onPress={handleSignUp}
-                            style={{width: 200, alignSelf: 'center', top: 250}}
-                        >
-                            <View
-                                style={{
-                                    padding: 10,
-                                    margin: 10,
-                                    borderRadius: 10,
-                                    width: 200,
-                                    height: 60,
-                                    alignSelf: 'center',
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        color: 'green',
-                                        textAlign: 'center',
-                                        fontWeight: 'bold',
-                                        fontSize: 16
-                                    }}
-                                >
-                                    初めての方はこちら
+                                    登録
                                 </Text>
                             </View>
                         </TouchableOpacity>
@@ -188,4 +147,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login;
+export default signUp;

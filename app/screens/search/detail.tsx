@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-nat
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useSearchParams } from 'expo-router/build/hooks';
 import { plant } from '../../../types/plant';
-
+import { searchPlant } from '../../api/searchPlant';
 
 
 
@@ -16,11 +16,10 @@ const Detail = () => {
   const query = rawQuery?.replace(/^"|"$/g, '') || ''; // ダブルクォーテーションを削除
 
   const fetchSearchResults = async () => {
-    setLoading(true);
+    
     try {
-      const response = await fetch(`http://localhost:3000/plants?query=${encodeURIComponent(query)}`);
-      const json = await response.json();
-      const plantData = json["plant"];
+      const response = await searchPlant(query);
+      const plantData = response;
       setData(plantData as plant);
     } catch (error) {
       console.error('Error fetching search results:', error);
@@ -37,6 +36,7 @@ const Detail = () => {
 
   useEffect(() => {
     // コンポーネントが表示されたときに実行される処理
+    setLoading(true);
     fetchSearchResults();
   }, []);
 

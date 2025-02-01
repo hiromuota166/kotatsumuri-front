@@ -65,7 +65,7 @@ const Search = () => {
       database.getAllAsync(`SELECT * FROM  "History";`).then(result => {
         if (result.length != 0) {
           setSearchHistory(result.map((item: any) => item.query));
-        } 
+        }
       })
     })
   };
@@ -112,7 +112,7 @@ const Search = () => {
                 onSubmit={() => {
                   saveSearchHistory(query);
                   router.push({
-                    pathname: '/detail',
+                    pathname: 'screens/search/detail',
                     params: { data: JSON.stringify(query) },
                   });
                 }}
