@@ -4,18 +4,18 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 interface RegistButtonProps {
     onPress: () => void;
     title: string;
-    isRegist?: boolean;
+    isRegistered?: boolean;
 }
 
-const RegistButton: React.FC<RegistButtonProps> = ({ onPress, title, isRegist }) => {
+const RegistButton: React.FC<RegistButtonProps> = ({ onPress, title, isRegistered }) => {
     return (
         <TouchableOpacity style={
-            isRegist ? styles.buttonRegisted : styles.button
+            isRegistered ? styles.buttonRegisted : styles.button
         } onPress={onPress}>
             <Text style={
-                isRegist ? styles.buttonTextRegisted : styles.buttonText
+                isRegistered ? styles.buttonTextRegisted : styles.buttonText
             }>{
-                isRegist ? '登録済み' : title
+                isRegistered ? '登録済み' : title
                 }</Text>
         </TouchableOpacity>
     );

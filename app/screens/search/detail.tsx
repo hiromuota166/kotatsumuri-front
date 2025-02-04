@@ -126,7 +126,9 @@ const Detail = () => {
             console.log('IDが存在しません');
           }
         }
-        } />
+        }
+        isRegistered={data?.is_registered}
+         />
       </View>
     </SafeAreaView>
   );
