@@ -32,10 +32,18 @@ export default function RootLayout() {
       <Stack initialRouteName="index">
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="screens/search/index" options={{ headerShown: true, title: '植物検索' }} />
-        <Stack.Screen name="screens/search/detail" options={{ headerShown: true ,  title: '植物詳細' }} />
-        <Stack.Screen name="screens/signUp/index" options={{ headerShown: false ,  title: '新規登録' }} />
-        <Stack.Screen name="screens/signUp/settingProfile" options={{ headerShown: false ,  title: 'プロフィール設定' }} />
+        <Stack.Screen name="screens/search/index" options={{
+          headerShown: true, title: '植物検索',
+          headerStyle: { backgroundColor: '#68A98A' }, // ヘッダーの背景色
+          headerTintColor: '#FFFFFF',
+        }} />
+        <Stack.Screen name="screens/search/detail" options={{
+          headerShown: true, title: '植物詳細',
+          headerStyle: { backgroundColor: '#68A98A' }, // ヘッダーの背景色
+          headerTintColor: '#FFFFFF',
+        }} />
+        <Stack.Screen name="screens/signUp/index" options={{ headerShown: false, title: '新規登録' }} />
+        <Stack.Screen name="screens/signUp/settingProfile" options={{ headerShown: false, title: 'プロフィール設定' }} />
         <Stack.Screen name="screens/tabScreen" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>

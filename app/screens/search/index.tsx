@@ -201,7 +201,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     height: 150,
-    borderTopWidth: 1,
   },
   cancelButtonText: {
     color: '#fff',
