@@ -11,7 +11,9 @@ const RegistButton: React.FC<RegistButtonProps> = ({ onPress, title, isRegistere
     return (
         <TouchableOpacity style={
             isRegistered ? styles.buttonRegisted : styles.button
-        } onPress={onPress}>
+        } onPress={
+            isRegistered ? () => {} : onPress
+        }>
             <Text style={
                 isRegistered ? styles.buttonTextRegisted : styles.buttonText
             }>{
