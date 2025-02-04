@@ -12,7 +12,7 @@ const Home = () => {
       <Button
         title="Click Me"
         onPress={() => {
-            router.push({ pathname: '../screens/search' });
+            router.push({ pathname: '../../screens/search' });
         }}
       />
     </View>
