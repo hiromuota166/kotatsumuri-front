@@ -16,7 +16,7 @@ const SettingProfile = () => {
         }
         // 登録処理をここに追加
         updateUser(username).then(() => {
-            router.replace({ pathname: '../../(tabs)' });
+            router.replace({ pathname: '../../../tabScreen' });
         });
     };
 
