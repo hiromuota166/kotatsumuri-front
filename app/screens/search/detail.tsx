@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useSearchParams } from 'expo-router/build/hooks';
 import { plant } from '../../../types/plant';
 import { searchPlant } from '../../api/searchPlant';
+import { plant_regist } from '../../api/plant_regist';
+import RegistButton from '../../../components/RegistButton';
 
 
 
@@ -108,6 +110,26 @@ const Detail = () => {
 
         </View>
       </ScrollView>
+      <View style= {{
+        height: 110,
+        backgroundColor: '#68A98A',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+      }}>
+      <RegistButton  title="+ MyGerdenに登録" onPress={
+        () => {
+          if (data?.id !== undefined) {
+            plant_regist(data.id)
+          } else {
+            console.log('IDが存在しません');
+          }
+        }
+        }
+        isRegistered={data?.is_registered}
+         />
+      </View>
     </SafeAreaView>
   );
 };
@@ -115,10 +137,11 @@ const Detail = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 0,
     backgroundColor: '#FFFBF3',
   },
   plantDetail: {
+    margin: 16,
     padding: 16,
     backgroundColor: '#ffffff',
     borderRadius: 30,
@@ -155,6 +178,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 18,
 
+  },
+
+  registerButton: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    margin: 16,
+    position: 'absolute',
+    bottom: 0,
   }
 });
 

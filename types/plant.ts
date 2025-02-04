@@ -4,6 +4,7 @@ export type plant = {
     description: string;
     care_periods: [carePeriod];
     growth_conditions: growthConditions;
+    is_registered?: boolean;
     }
 
 interface carePeriod {
