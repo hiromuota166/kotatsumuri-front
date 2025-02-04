@@ -7,6 +7,7 @@ import {
     Keyboard,
 } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { autoLogin } from "../app/api/autoLogin";
@@ -35,7 +36,12 @@ const Login = () => {
     
     const handleLogin = async () => {
         try {
-           await signInWithEmailAndPassword(auth, email, password)
+           const credential =  await signInWithEmailAndPassword(auth, email, password)
+            const idToken = await credential.user.getIdToken();
+            const refreshToken = credential.user.refreshToken;
+            SecureStore.setItemAsync('idToken', idToken);
+            SecureStore.setItemAsync('refreshToken', refreshToken);
+
            router.replace({ pathname: '../(tabs)' });
         } catch (error) {
             setError("メールアドレスまたはパスワードが間違っています");
