@@ -77,7 +77,7 @@ const Detail = () => {
 
           <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: '#ccc', paddingBottom: 8 }}>
             <Text style={{ flex: 1, fontWeight: 'bold' }}>時期</Text>
-            <Text style={{ flex: 2, fontWeight: 'bold' }}>開始日</Text>
+            <Text style={{ flex: 2, fontWeight: 'bold', marginLeft: 30 }}>開始日</Text>
             <Text style={{ flex: 2, fontWeight: 'bold' }}>終了日</Text>
           </View>
           {data?.care_periods.map((period, index) => (
@@ -92,18 +92,18 @@ const Detail = () => {
             >
               <Text style={{ flex: 1 }}>
                 {period.period_type === 'blooming_period'
-                  ? '開花期'
+                  ? '開花期🌸'
                   : period.period_type === 'pruning_period'
-                    ? '剪定期'
+                    ? '剪定期🍃'
                     : period.period_type === 'planting_period'
-                      ? '植付期'
+                      ? '植付期🌱'
                       : period.period_type === 'fertilizing_period'
-                        ? '肥料期'
+                        ? '肥料期🫘'
                         : period.period_type === 'repotting_period'
-                          ? '植替期'
+                          ? '植替期🪴'
                           : 'No Data'}
               </Text>
-              <Text style={{ flex: 2 }}>{formatDate(period.start_date)}</Text>
+              <Text style={{ flex: 2,  marginLeft: 30 }}>{formatDate(period.start_date)}</Text>
               <Text style={{ flex: 2 }}>{formatDate(period.end_date)}</Text>
             </View>
           ))}
@@ -166,18 +166,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000000',
     marginRight: 15,
+    width: '30%',       
   },
   subtitle: {
     fontSize: 16,
     marginBottom: 8,
     fontWeight: 'bold',
+    width: '70%',  
   },
 
   // セクションの横並び
   featureContainer: {
+    width: '100%',
     flexDirection: 'row',
     marginBottom: 18,
-
+    paddingRight: 15,
   },
 
   registerButton: {
