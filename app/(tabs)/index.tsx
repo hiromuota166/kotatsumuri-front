@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context'; // SafeAreaView をインポート
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Home = () => {
   const router = useRouter();
@@ -17,23 +18,25 @@ const Home = () => {
           height: 15 * vh,
           marginLeft: 10 * vw,
           marginRight: 10 * vw,
-        }]
-        }>
+        }]}>
           <View style={[styles.topHeader]}>
-            <View style={[styles.leftTopHeader, { width: 6 * vw }]}>
-            </View>
-            <View style={[styles.titleArea, { marginLeft: 8 * vw, }]}>
+            <View style={[styles.leftTopHeader, { width: 6 * vw }]} />
+            <View style={[styles.titleArea, { marginLeft: 8 * vw }]}>
               <Text style={styles.line1}>MY</Text>
               <Text style={styles.line2}>Garden</Text>
             </View>
           </View>
           <View style={[styles.bottomHeader]}>
-            <Button
-              title="Click Me"
+            {/* TouchableOpacityはボタンをカスタマイズできてButtonより軽量 */}
+            <TouchableOpacity
+              style={styles.searchArea}
               onPress={() => {
                 router.push({ pathname: '../screens/search' });
               }}
-            />
+            >
+              <Icon name="search" size={16} color="#000" style={{ marginLeft: 2 * vw }} />
+              <Text style={styles.searchText}>Search</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -84,6 +87,19 @@ const styles = StyleSheet.create({
     height: '50%',
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  searchArea: {
+    height: '50%',
+    width: '100%',
+    borderWidth: 1,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchText: {
+    marginLeft: 10,
+    fontSize: 16,
   },
 });
 
