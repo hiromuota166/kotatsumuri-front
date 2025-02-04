@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
+import * as SecureStore from 'expo-secure-store';
 const signUp = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
@@ -23,6 +23,10 @@ const signUp = () => {
         try {
             const auth = getAuth();
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const idToken = await userCredential.user.getIdToken();
+            const refreshToken = userCredential.user.refreshToken;
+            SecureStore.setItemAsync('idToken', idToken);
+            SecureStore.setItemAsync('refreshToken', refreshToken);
             console.log(userCredential);
             router.replace({ pathname: './signUp/settingProfile' });
         } catch (error) {
