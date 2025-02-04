@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView,
     ScrollView,
@@ -9,6 +9,7 @@ import {
 import { useFocusEffect, useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { autoLogin } from "../app/api/autoLogin";
 
 const Login = () => {
     const router = useRouter();
@@ -16,6 +17,21 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [focus, setFocus] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        console.log('Login screen mounted');
+        handleAutoLogin();
+    }, []);
+
+    const handleAutoLogin = async () => {
+        console.log('Auto login');
+        const result = await autoLogin();
+        if (result) {
+            router.replace({ pathname: '../(tabs)' });
+        } else {
+            console.log('Not logged in');
+        }
+    }
     
     const handleLogin = async () => {
         try {
