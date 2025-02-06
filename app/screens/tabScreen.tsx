@@ -51,7 +51,7 @@ export default function TabScreen() {
                                 width: 30,
                                 height: 30,
                                 tintColor: 'gray',
-                            }} source={require('../../assets/images/tab-search.png')} />
+                            }} source={require('../../assets/images/tab-mypage.png')} />
                     }
                 },
                 tabBarStyle: {
