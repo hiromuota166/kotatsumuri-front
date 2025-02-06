@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ const Home = () => {
   const { height, width } = Dimensions.get('window');
   const vw = width / 100;
   const vh = height / 100;
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -31,7 +32,7 @@ const Home = () => {
             <TouchableOpacity
               style={styles.searchArea}
               onPress={() => {
-                router.push({ pathname: '../screens/search' });
+                navigation.navigate("Search" as never);
               }}
             >
               <Icon name="search" size={16} color="#000" style={{ marginLeft: 2 * vw }} />
