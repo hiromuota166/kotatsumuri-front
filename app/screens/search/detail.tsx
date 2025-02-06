@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useSearchParams } from 'expo-router/build/hooks';
 import { plant } from '../../../types/plant';
@@ -119,9 +119,14 @@ const Detail = () => {
         width: '100%',
       }}>
       <RegistButton  title="+ MyGerdenに登録" onPress={
-        () => {
+        async () => {
           if (data?.id !== undefined) {
-            plant_regist(data.id)
+            const response = await plant_regist(data.id)
+            if (response == 204) {
+              fetchSearchResults();
+            } else {
+              Alert.alert('登録に失敗しました');
+            }
           } else {
             console.log('IDが存在しません');
           }
