@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useSearchParams } from 'expo-router/build/hooks';
 import { plant } from '../../../types/plant';
 import { searchPlant } from '../../api/searchPlant';
+import { plant_regist } from '../../api/plant_regist';
+import RegistButton from '../../../components/RegistButton';
 
 
 
@@ -75,7 +77,7 @@ const Detail = () => {
 
           <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: '#ccc', paddingBottom: 8 }}>
             <Text style={{ flex: 1, fontWeight: 'bold' }}>時期</Text>
-            <Text style={{ flex: 2, fontWeight: 'bold' }}>開始日</Text>
+            <Text style={{ flex: 2, fontWeight: 'bold', marginLeft: 30 }}>開始日</Text>
             <Text style={{ flex: 2, fontWeight: 'bold' }}>終了日</Text>
           </View>
           {data?.care_periods.map((period, index) => (
@@ -90,24 +92,49 @@ const Detail = () => {
             >
               <Text style={{ flex: 1 }}>
                 {period.period_type === 'blooming_period'
-                  ? '開花期'
+                  ? '開花期🌸'
                   : period.period_type === 'pruning_period'
-                    ? '剪定期'
+                    ? '剪定期🍃'
                     : period.period_type === 'planting_period'
-                      ? '植付期'
+                      ? '植付期🌱'
                       : period.period_type === 'fertilizing_period'
-                        ? '肥料期'
+                        ? '肥料期🫘'
                         : period.period_type === 'repotting_period'
-                          ? '植替期'
+                          ? '植替期🪴'
                           : 'No Data'}
               </Text>
-              <Text style={{ flex: 2 }}>{formatDate(period.start_date)}</Text>
+              <Text style={{ flex: 2,  marginLeft: 30 }}>{formatDate(period.start_date)}</Text>
               <Text style={{ flex: 2 }}>{formatDate(period.end_date)}</Text>
             </View>
           ))}
 
         </View>
       </ScrollView>
+      <View style= {{
+        height: 110,
+        backgroundColor: '#68A98A',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+      }}>
+      <RegistButton  title="+ MyGerdenに登録" onPress={
+        async () => {
+          if (data?.id !== undefined) {
+            const response = await plant_regist(data.id)
+            if (response == 204) {
+              fetchSearchResults();
+            } else {
+              Alert.alert('登録に失敗しました');
+            }
+          } else {
+            console.log('IDが存在しません');
+          }
+        }
+        }
+        isRegistered={data?.is_registered}
+         />
+      </View>
     </SafeAreaView>
   );
 };
@@ -115,10 +142,11 @@ const Detail = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 0,
     backgroundColor: '#FFFBF3',
   },
   plantDetail: {
+    margin: 16,
     padding: 16,
     backgroundColor: '#ffffff',
     borderRadius: 30,
@@ -143,18 +171,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000000',
     marginRight: 15,
+    width: '30%',       
   },
   subtitle: {
     fontSize: 16,
     marginBottom: 8,
     fontWeight: 'bold',
+    width: '70%',  
   },
 
   // セクションの横並び
   featureContainer: {
+    width: '100%',
     flexDirection: 'row',
     marginBottom: 18,
+    paddingRight: 15,
+  },
 
+  registerButton: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    margin: 16,
+    position: 'absolute',
+    bottom: 0,
   }
 });
 
