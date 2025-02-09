@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { getAuth, getIdToken } from "firebase/auth";
 import * as SecureStore from 'expo-secure-store';
+import getIdTokenFromRefreshToken from "./refreshLogin";
 
 
 const apiClient = axios.create({
@@ -10,8 +11,11 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
     async (config) => {
-        const auth = getAuth();
-        const idToken = await SecureStore.getItemAsync('idToken');
+        const refreshToken = await SecureStore.getItemAsync('refreshToken');
+        if (!refreshToken) {
+            return config;
+        }
+        const idToken = await getIdTokenFromRefreshToken(refreshToken);
         config.headers.Authorization = `Bearer ${idToken}`
         console.log(config.headers);
         return config;

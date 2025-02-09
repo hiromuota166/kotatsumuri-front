@@ -133,7 +133,7 @@ const Search = () => {
           </View>
         </View>
       </View>
-      <View style={styles.historyContainer}>≈
+      <View style={styles.historyContainer}>
         <Text style={{
           paddingLeft: 25,
           paddingTop: 30,
@@ -198,8 +198,9 @@ const styles = StyleSheet.create({
   },
 
   container: {
+    position: 'absolute',
+    top: 0,
     height: 150,
-    borderTopWidth: 1,
   },
   cancelButtonText: {
     color: '#fff',
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   zstack: {
-    height: 150,
+    height: 170,
     backgroundColor: '#68A98A',
     justifyContent: 'center',
     ...StyleSheet.absoluteFillObject,
@@ -227,10 +228,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingLeft: 30,
+    top: 20,
   },
   historyContainer: {
     flex: 1,
     position: 'relative',
+    top: 100,
     padding: 10,
   },
 });
