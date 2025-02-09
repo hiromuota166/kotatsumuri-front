@@ -84,7 +84,6 @@ export default function TabScreen() {
             <Tab.Screen name="Home" component={Home} options={{ tabBarLabel: 'ホーム' }} />
             <Tab.Screen name="Search" component={Search} options={{ tabBarLabel: '検索' }} />
             <Tab.Screen name="MyPage" component={Search} options={{ tabBarLabel: 'マイページ' }} />
-            <Tab.Screen name="MyPage" component={Search} options={{ tabBarLabel: 'マイページ' }} />
             <Tab.Screen name="Diagnoses" component={Diagnoses} options={{tabBarLabel: '病気診断'}}/>
         </Tab.Navigator>
     );
