@@ -17,7 +17,8 @@ export async function diagnoses(
     fertilizer_type: string,
     fertilizing_frequency: string,
     pesticide_history: string,
-    recent_weather: string
+    recent_weather: string,
+    image: string
 ): Promise<any> {
     const response = await apiClient.post(`/users/plants/${plant_id}/diagnoses`, {
         name,
@@ -34,7 +35,8 @@ export async function diagnoses(
         fertilizer_type,
         fertilizing_frequency,
         pesticide_history, 
-        recent_weather
+        recent_weather,
+        image
     });
     return response.data;
 }
