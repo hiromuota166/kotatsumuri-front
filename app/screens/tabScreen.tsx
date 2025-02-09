@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { View, Text, Image } from 'react-native';
 import Home from '../screens/home/index';
 import Search from '../screens/search/index';
+import Diagnoses from '../screens/diagnoses/index';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,6 +53,19 @@ export default function TabScreen() {
                                 height: 30,
                                 tintColor: 'gray',
                             }} source={require('../../assets/images/tab-mypage.png')} />
+                    } else if (route.name === 'Diagnoses') {
+                        return focused ?
+                            <Image style={{
+                                width: 30,
+                                height: 30,
+                                tintColor: '#68A98A',
+                            }} source={require('../../assets/images/tab-diagnoses.png')} />
+                            :
+                            <Image style={{
+                                width: 30,
+                                height: 30,
+                                tintColor: 'gray',
+                            }} source={require('../../assets/images/tab-diagnoses.png')} />
                     }
                 },
                 tabBarStyle: {
@@ -70,6 +84,8 @@ export default function TabScreen() {
             <Tab.Screen name="Home" component={Home} options={{ tabBarLabel: 'ホーム' }} />
             <Tab.Screen name="Search" component={Search} options={{ tabBarLabel: '検索' }} />
             <Tab.Screen name="MyPage" component={Search} options={{ tabBarLabel: 'マイページ' }} />
+            <Tab.Screen name="MyPage" component={Search} options={{ tabBarLabel: 'マイページ' }} />
+            <Tab.Screen name="Diagnoses" component={Diagnoses} options={{tabBarLabel: '病気診断'}}/>
         </Tab.Navigator>
     );
 }
