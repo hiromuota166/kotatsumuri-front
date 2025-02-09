@@ -85,7 +85,10 @@ const Home = () => {
                 paddingVertical: 1 * vh,
                 paddingHorizontal: 2 * vw,
               }]}
-              onPress={() => setSelectedTab(tab)}
+              onPress={() => {
+                setSelectedTab(tab);
+                fetchFlowers();
+              }}
             >
               <Text style={[styles.tabText, selectedTab === tab && styles.activeTabText]}>
                 {tab}
