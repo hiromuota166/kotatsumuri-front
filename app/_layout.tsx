@@ -33,7 +33,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="screens/search/index" options={{
-          headerShown: true, title: '植物検索',
+          headerShown: false, title: '植物検索',
           headerStyle: { backgroundColor: '#68A98A' }, // ヘッダーの背景色
           headerTintColor: '#FFFFFF',
         }} />
