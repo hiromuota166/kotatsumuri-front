@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     top: 70,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     alignSelf: "center",
     top: 70,
     fontFamily: "ZenMaruGothic-Medium", // フォント適用
