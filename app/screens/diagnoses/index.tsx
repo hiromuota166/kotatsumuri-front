@@ -6,8 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DiagnosesForm } from '../../../types/diagnosesForm';
 import { get_plant_regist } from '../../api/plant_regist';
 import { RegisteredPlant } from '../../../types/plant';
-import ImageViewer from '../../../components/ImagePicker';
-import ButtonImage from '../../../components/Button';
 import { Picker } from '@react-native-picker/picker';
 import Selector from '../../../components/Selector';
 import * as ImagePicker from 'react-native-image-picker';
@@ -44,7 +42,7 @@ const Diagnoses = () => {
     });
   }
 
-  const onButtonPress = React.useCallback((options) => {
+  const onButtonPress = React.useCallback((options: any) => {
       ImagePicker.launchImageLibrary(options, setResponse).then((response) => {
         if (response.didCancel) {
           console.log('User cancelled image picker');
@@ -97,35 +95,35 @@ const Diagnoses = () => {
             <Text style={styles.label}>栽培場所</Text>
             <Selector
               options={Object.values(location)}
-              onSelect={(value) => handleSelect('location', value)}
+              onSelect={(value: string) => handleSelect('location', value)}
             />
           </View>
           <View style={styles.section}>
             <Text style={styles.label}>日照時間</Text>
             <Selector
               options={Object.values(sunlight)}
-              onSelect={(value) => handleSelect('sunlight', value)}
+              onSelect={(value: string) => handleSelect('sunlight', value)}
             />
           </View>
           <View style={styles.section}>
             <Text style={styles.label}>通風状況</Text>
             <Selector
               options={Object.values(ventilation)}
-              onSelect={(value) => handleSelect('ventilation', value)}
+              onSelect={(value: string) => handleSelect('ventilation', value)}
             />
           </View>
           <View style={styles.section}>
             <Text style={styles.label}>土壌の種類</Text>
             <Selector
               options={Object.values(soil_type)}
-              onSelect={(value) => handleSelect('soil_type', value)}
+              onSelect={(value: string) => handleSelect('soil_type', value)}
             />
           </View>
           <View style={styles.section}>
             <Text style={styles.label}>気温と湿度の状況</Text>
             <Selector
               options={Object.values(temperature)}
-              onSelect={(value) => handleSelect('temperature', value)}
+              onSelect={(value: string) => handleSelect('temperature', value)}
             />
           </View>
           <View style={styles.section}>
@@ -153,7 +151,7 @@ const Diagnoses = () => {
             <Text style={styles.label}>肥料の種類</Text>
             <Selector
               options={Object.values(fartilizer_type)}
-              onSelect={(value) => handleSelect('fertilizer_type', value)}
+              onSelect={(value: string) => handleSelect('fertilizer_type', value)}
             />
           </View>
           <View style={styles.section}>
@@ -167,7 +165,7 @@ const Diagnoses = () => {
             <Text style={styles.label}>使用薬剤の有無</Text>
             <Selector
               options={Object.values(pesticide_history)}
-              onSelect={(value) => handleSelect('pesticide_history', value)}
+              onSelect={(value: string) => handleSelect('pesticide_history', value)}
             />
           </View>
           <View style={styles.section}>
