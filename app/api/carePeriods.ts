@@ -7,6 +7,7 @@ export type CarePeriod = {
   start_date: Date;
   end_date: Date;
   period_type: string;
+  image_url: string;
 };
 
 export async function carePeriods(): Promise<CarePeriod[]> {

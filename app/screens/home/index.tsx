@@ -111,9 +111,9 @@ const Home = () => {
               showsHorizontalScrollIndicator={false}
             >
               {filterFlowersByTab(tab).map((flower) => (
-                <View key={flower.id} style={[styles.flowerItem, { width: 20 * vw, marginRight: 3 * vw }]}>
+                <View key={flower.id} style={[styles.flowerItem, { width: 20 * vw, marginRight: 8 * vw }]}>
                   <Image
-                    source={{ uri: `${apiClient.defaults.baseURL}/plants/${flower.plant_id}/image` }}
+                    source={{ uri: flower.image_url}}
                     style={styles.flowerImage}
                   />
                   <Text style={styles.flowerName}>{flower.plant_name}</Text>
