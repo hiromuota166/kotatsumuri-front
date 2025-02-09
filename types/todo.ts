@@ -9,13 +9,13 @@ export type Todo = {
 }
 
 enum Priority {
-    High = "high",
-    Medium = "medium",
-    Low = "low",
+    High = "高い",
+    Medium = "普通",
+    Low = "低",
   }
 
 enum Status {
-    Done = "done",
-    NotStarted = "not_started",
+    Done = "完了",
+    NotStarted = "未着手",
 }
   
