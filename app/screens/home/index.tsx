@@ -31,7 +31,7 @@ const Home = () => {
   // useEffectでコンポーネントの初回レンダリング時にAPIを呼び出す
   useEffect(() => {
     fetchFlowers();
-  }, []);
+  }, [selectedTab]);
 
   const tabs = ['ALL', '開花時期', '植え付け時期', '植え替え時期', '肥料時期', '剪定時期'];
 
