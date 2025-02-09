@@ -28,7 +28,7 @@ const Login = () => {
         console.log('Auto login');
         const result = await autoLogin();
         if (result) {
-            router.replace({ pathname: '../(tabs)' });
+            router.replace({ pathname: '../screens/tabScreen' });
         } else {
             console.log('Not logged in');
         }
@@ -42,7 +42,7 @@ const Login = () => {
             SecureStore.setItemAsync('idToken', idToken);
             SecureStore.setItemAsync('refreshToken', refreshToken);
 
-           router.replace({ pathname: '../(tabs)' });
+           router.replace({ pathname: '../screens/tabScreen' });
         } catch (error) {
             setError("メールアドレスまたはパスワードが間違っています");
         }
