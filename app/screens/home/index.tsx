@@ -31,7 +31,7 @@ const Home = () => {
   // useEffectでコンポーネントの初回レンダリング時にAPIを呼び出す
   useEffect(() => {
     fetchFlowers();
-  }, []);
+  }, [selectedTab]);
 
   const tabs = ['ALL', '開花時期', '植え付け時期', '植え替え時期', '肥料時期', '剪定時期'];
 
@@ -85,7 +85,10 @@ const Home = () => {
                 paddingVertical: 1 * vh,
                 paddingHorizontal: 2 * vw,
               }]}
-              onPress={() => setSelectedTab(tab)}
+              onPress={() => {
+                setSelectedTab(tab);
+                fetchFlowers();
+              }}
             >
               <Text style={[styles.tabText, selectedTab === tab && styles.activeTabText]}>
                 {tab}
@@ -111,9 +114,9 @@ const Home = () => {
               showsHorizontalScrollIndicator={false}
             >
               {filterFlowersByTab(tab).map((flower) => (
-                <View key={flower.id} style={[styles.flowerItem, { width: 20 * vw, marginRight: 3 * vw }]}>
+                <View key={flower.id} style={[styles.flowerItem, { width: 20 * vw, marginRight: 8 * vw }]}>
                   <Image
-                    source={{ uri: `${apiClient.defaults.baseURL}/plants/${flower.plant_id}/image` }}
+                    source={{ uri: flower.image_url}}
                     style={styles.flowerImage}
                   />
                   <Text style={styles.flowerName}>{flower.plant_name}</Text>
