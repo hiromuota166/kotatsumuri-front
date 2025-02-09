@@ -5,12 +5,10 @@ import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { useImage } from "@/context/ImageContext";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const router = useRouter();
-  const { selectedImage } = useImage();
 
   return (
     <Tabs
@@ -66,11 +64,7 @@ export default function TabLayout() {
           tabBarLabelStyle: { top: 30, right: 10 },
           tabBarIcon: ({ color }) => (
             <Image
-              source={
-                selectedImage
-                  ? { uri: selectedImage }
-                  : require("@/assets/images/usericon.png")
-              }
+              source={require("@/assets/images/usericon.png")}
               style={{ width: 40, height: 40, top: 20, right: 10 }}
             />
           ),
