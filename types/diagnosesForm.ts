@@ -16,7 +16,8 @@ export type DiagnosesForm = {
     // 1~7みたいな数
     fertilizing_frequency?: string,
     pesticide_history?: pesticide_history,
-    recent_weather?: string
+    recent_weather?: string,
+    image?: string
 }
 
 
