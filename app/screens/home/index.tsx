@@ -33,7 +33,18 @@ const Home = () => {
     fetchFlowers();
   }, []);
 
-  const tabs = ['ALL', '開花期', '植え付け期', '肥料'];
+  const tabs = ['ALL', '開花時期', '植え付け時期', '植え替え時期', '肥料時期', '剪定時期'];
+
+  // タブごとにデータをフィルタリングする関数
+  const filterFlowersByTab = (tab: string) => {
+    if (tab === 'ALL') return flowers;
+    if (tab === '開花時期') return flowers.filter(flower => flower.period_type === 'blooming_period');
+    if (tab === '植え付け時期') return flowers.filter(flower => flower.period_type === 'planting_period');
+    if (tab === '植え替え時期') return flowers.filter(flower => flower.period_type === 'repotting_period');
+    if (tab === '肥料時期') return flowers.filter(flower => flower.period_type === 'fertilizing_period');
+    if (tab === '剪定時期') return flowers.filter(flower => flower.period_type === 'pruning_period');
+    return [];
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -60,39 +71,56 @@ const Home = () => {
       </View>
 
       {/* Tabs */}
-      <View style={[styles.containerTab, { marginHorizontal: 10 * vw }]}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
-            key={tab}
-            style={[styles.tab, selectedTab === tab && styles.activeTab]}
-            onPress={() => setSelectedTab(tab)}
-          >
-            <Text style={[styles.tabText, selectedTab === tab && styles.activeTabText]}>
-              {tab}
-            </Text>
-          </TouchableOpacity>
-        ))}
+      <View style={{ height: 8 * vh, marginBottom: 2 * vh }}>
+        <ScrollView
+          horizontal={true}  // 横スクロールを有効化
+          showsHorizontalScrollIndicator={false} // スクロールバーを非表示
+          contentContainerStyle={[styles.containerTab]}
+        >
+          {tabs.map((tab) => (
+            <TouchableOpacity
+              key={tab}
+              style={[styles.tab, selectedTab === tab && styles.activeTab, {
+                height: 4 * vh,
+                paddingVertical: 1 * vh,
+                paddingHorizontal: 2 * vw,
+              }]}
+              onPress={() => setSelectedTab(tab)}
+            >
+              <Text style={[styles.tabText, selectedTab === tab && styles.activeTabText]}>
+                {tab}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
 
       {/* Flower Sections */}
-      <ScrollView>
-        {tabs.map((tab) => (
-          (selectedTab === 'ALL' || selectedTab === tab) && (
-            <View key={tab} style={styles.section}>
-              <Text style={styles.sectionTitle}>{tab}</Text>
-              <View style={styles.flowerList}>
-                {flowers.map((flower) => (
-                  <View key={flower.id} style={styles.flowerItem}>
-                    <Image
-                      source={{ uri: `${apiClient.defaults.baseURL}/plants/${flower.plant_id}/image` }}
-                      style={styles.flowerImage}
-                    />
-                    <Text style={styles.flowerName}>{flower.plant_name}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          )
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 10 * vw,
+          paddingBottom: 10 * vh,
+        }}
+      >
+        {(selectedTab === 'ALL' ? tabs : [selectedTab]).map((tab) => (
+          <View key={tab} style={[styles.section, { marginVertical: 2 * vh }]}>
+            <Text style={styles.sectionTitle}>{tab}</Text>
+            <ScrollView
+              horizontal={true}
+              style={[styles.horizontalScroll, { paddingVertical: 2 * vh }]}
+              showsHorizontalScrollIndicator={false}
+            >
+              {filterFlowersByTab(tab).map((flower) => (
+                <View key={flower.id} style={[styles.flowerItem, { width: 20 * vw, marginRight: 3 * vw }]}>
+                  <Image
+                    source={{ uri: `${apiClient.defaults.baseURL}/plants/${flower.plant_id}/image` }}
+                    style={styles.flowerImage}
+                  />
+                  <Text style={styles.flowerName}>{flower.plant_name}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -149,11 +177,10 @@ const styles = StyleSheet.create({
   containerTab: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center', // 垂直方向に揃える
   },
   tab: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: '#E0E0E0',
     marginHorizontal: 5,
   },
@@ -163,6 +190,7 @@ const styles = StyleSheet.create({
   tabText: {
     color: '#757575',
     fontSize: 14,
+    textAlign: 'center', // テキストを中央揃え
   },
   activeTabText: {
     color: '#FFF',
@@ -177,15 +205,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  flowerList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+  horizontalScroll: {
+    paddingVertical: 10,
   },
   flowerItem: {
-    width: '30%',
     alignItems: 'center',
-    marginBottom: 15,
   },
   flowerImage: {
     width: 100,
