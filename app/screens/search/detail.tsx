@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useSearchParams } from 'expo-router/build/hooks';
 import { plant } from '../../../types/plant';
 import { searchPlant } from '../../api/searchPlant';
-import { plant_regist } from '../../api/plant_regist';
+import { post_plant_regist } from '../../api/plant_regist';
 import RegistButton from '../../../components/RegistButton';
 
 
@@ -121,7 +121,7 @@ const Detail = () => {
       <RegistButton  title="+ MyGerdenに登録" onPress={
         async () => {
           if (data?.id !== undefined) {
-            const response = await plant_regist(data.id)
+            const response = await post_plant_regist(data.id)
             if (response == 204) {
               fetchSearchResults();
             } else {
