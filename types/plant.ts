@@ -18,3 +18,9 @@ interface growthConditions {
     soil: string;
     hardiness_zone: string;
 }
+
+export type RegisteredPlant =  {
+    id: string;
+    name: string;
+    description: string;
+}
