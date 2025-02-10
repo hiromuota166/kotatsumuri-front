@@ -45,6 +45,9 @@ export default function RootLayout() {
         <Stack.Screen name="screens/signUp/index" options={{ headerShown: false, title: '新規登録' }} />
         <Stack.Screen name="screens/signUp/settingProfile" options={{ headerShown: false, title: 'プロフィール設定' }} />
         <Stack.Screen name="screens/tabScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/home/index" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/diagnoses/index" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/diagnoses/diagnosesDetail" options={{ headerShown: true }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
