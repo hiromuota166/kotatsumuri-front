@@ -36,9 +36,24 @@ const Diagnoses = () => {
   };
 
   const handleSubmit = () => {
+    if (!diagnosesForm) {
+      Alert.alert('入力されていない項目があります');
+      return;
+    } else if (!diagnosesForm.plant_id) {
+      Alert.alert('植物名が選択されていません');
+      return;
+    } else if (!diagnosesForm.location) {
+      Alert.alert('栽培場所が選択されていません');
+      return;
+    } else if (!diagnosesForm.sunlight) {
+
+    }
     router.push({
       pathname: 'screens/diagnoses/diagnosesDetail',
-      params: { data: JSON.stringify(diagnosesForm) },
+      params: {
+        // diagnosesFormをそのまま渡す
+        diagnosis: JSON.stringify(diagnosesForm),
+      },
     });
   }
 
@@ -134,7 +149,7 @@ const Diagnoses = () => {
             />
           </View>
           <View style={styles.section}>
-            <Text style={styles.label}>茎や根への影響(例: 週3)</Text>
+            <Text style={styles.label}>茎や根への影響</Text>
             <TextInput
               style={styles.input}
               onChangeText={(value) => handleSelect('stem_root_condition', value)}
@@ -200,7 +215,7 @@ const Diagnoses = () => {
           </View>
           <Button title="診断する!"
             color={'#68A98A'}
-           onPress={() => { handleSubmit}} />
+           onPress={() =>  handleSubmit() } />
         </View>
       </ScrollView>
     </SafeAreaView>

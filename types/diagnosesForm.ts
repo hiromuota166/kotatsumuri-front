@@ -1,23 +1,22 @@
 export type DiagnosesForm = {
     plant_id: string,
     name: string,
-    location?: location,
-    sunlight?: sunlight,
-    ventilation?: ventilation,
-    soil_type?: soil_type,
-    temperature?: temperature,
-    humidity?: string,
-    leaf_color?: string,
-    stem_root_condition?: string,
+    location: location,
+    sunlight: sunlight,
+    ventilation: ventilation,
+    soil_type: soil_type,
+    temperature: temperature,
+    humidity: string,
+    leaf_color: string,
+    stem_root_condition: string,
     //　1~7みたいな数
-    watering_frequency?: string,
+    watering_frequency: string,
     // 液体肥料、固形肥料、無し
-    fertilizer_type?: fartilizer_type,
+    fertilizer_type: fartilizer_type,
     // 1~7みたいな数
-    fertilizing_frequency?: string,
-    pesticide_history?: pesticide_history,
-    recent_weather?: string,
-    image?: string
+    fertilizing_frequency: string,
+    pesticide_history: pesticide_history,
+    recent_weather: string,
 }
 
 

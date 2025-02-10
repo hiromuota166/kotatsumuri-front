@@ -1,7 +1,8 @@
 import { Todo } from './todo';
 export type Diagnosis = {
     disease: string;
-    possible_cause: [string];
+    description: string;
+    possible_causes: [string];
     symptoms: [string];
-    todo: [Todo];
+    todo_list: [Todo];
 }
