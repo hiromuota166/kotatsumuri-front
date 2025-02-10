@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
-import { useNavigation } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CarePeriod, carePeriods } from '@/app/api/carePeriods';
-import apiClient from '@/app/api';
+import { CarePeriod, carePeriods } from '../../api/carePeriods';
+import { useRouter } from 'expo-router';
 
 const Home = () => {
   const { height, width } = Dimensions.get('window');
@@ -34,6 +34,7 @@ const Home = () => {
   }, [selectedTab]);
 
   const tabs = ['ALL', '開花時期', '植え付け時期', '植え替え時期', '肥料時期', '剪定時期'];
+  const router = useRouter();
 
   // タブごとにデータをフィルタリングする関数
   const filterFlowersByTab = (tab: string) => {
@@ -114,13 +115,17 @@ const Home = () => {
               showsHorizontalScrollIndicator={false}
             >
               {filterFlowersByTab(tab).map((flower) => (
-                <View key={flower.id} style={[styles.flowerItem, { width: 20 * vw, marginRight: 8 * vw }]}>
+                <TouchableOpacity
+                  key={flower.id}
+                  style={[styles.flowerItem, { width: 20 * vw, marginRight: 8 * vw }]}
+                  onPress={() => router.push({ pathname: 'screens/home/detail', params: { data: JSON.stringify(flower.id) } })}
+                >
                   <Image
-                    source={{ uri: flower.image_url}}
+                    source={{ uri: flower.image_url }}
                     style={styles.flowerImage}
                   />
                   <Text style={styles.flowerName}>{flower.plant_name}</Text>
-                </View>
+                </TouchableOpacity>
               ))}
             </ScrollView>
           </View>

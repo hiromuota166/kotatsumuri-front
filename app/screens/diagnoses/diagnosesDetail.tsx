@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert, ActivityIndicator, Button } from 'react-native';
 import { Diagnosis } from '../../../types/diagnoses';
 import { DiagnosesForm } from '../../../types/diagnosesForm';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { get_diagnoses } from '../../api/diagnoses';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { post_todos ,get_todos } from '../../api/todo';
 
 type RawParam = {
   diagnosis: string;
@@ -16,7 +17,8 @@ const DiagnosesDetail = () => {
   const rawDiagnosis = route.params?.diagnosis;
   const diagnosis = JSON.parse(rawDiagnosis) as DiagnosesForm;
 
-  const [diagnosesDetail, setDiagnosesDetail] = React.useState<Diagnosis | null>(null);
+  const [diagnosesDetail, setDiagnosesDetail] = useState<Diagnosis | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +42,8 @@ const DiagnosesDetail = () => {
         setDiagnosesDetail(response);
       } catch (error) {
         Alert.alert('診断の取得に失敗しました');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -47,50 +51,47 @@ const DiagnosesDetail = () => {
   }, []);
 
   return (
-    <SafeAreaView
-    style={{ flex: 1, backgroundColor: '#FFFBF3' }}
-    >
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>診断結果</Text>
-      {diagnosesDetail && (
-        <>
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>病気</Text>
-            <View style={styles.divider} />
-            <Text style={styles.value}>{diagnosesDetail.disease}</Text>
-          </View>
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>病気</Text>
-            <View style={styles.divider} />
-            <Text style={styles.value}>{diagnosesDetail.description}</Text>
-          </View>
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>考えられる原因</Text>
-            <View style={styles.divider} />
-            {diagnosesDetail.possible_causes && diagnosesDetail.possible_causes.map((cause, index) => (
-              <Text key={index} style={styles.value}>{cause}</Text>
-            ))}
-          </View>
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>症状</Text>
-            <View style={styles.divider} />
-            {diagnosesDetail.symptoms && diagnosesDetail.symptoms.map((symptom, index) => (
-              <Text key={index} style={styles.value}>{symptom}</Text>
-            ))}
-          </View>
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>対処法</Text>
-            <View style={styles.divider} />
-            {diagnosesDetail.todo_list && diagnosesDetail.todo_list.map((todo, index) => (
-              <Text key={index} style={styles.value}>{todo.description}</Text>
-            ))}
-          </View>
-          <View style={styles.card}>
-            <Button title="対処法をやることリストに登録する！" onPress={() => { }} color={"#68A98A"} />
-          </View>
-        </>
-      )}
-    </ScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFBF3' }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>診断結果</Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="#68A98A" />
+        ) : (
+          diagnosesDetail && (
+            <>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>病気</Text>
+                <View style={styles.divider} />
+                <Text style={styles.value}>{diagnosesDetail.disease}</Text>
+              </View>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>考えられる原因</Text>
+                <View style={styles.divider} />
+                {diagnosesDetail.possible_causes && diagnosesDetail.possible_causes.map((cause, index) => (
+                  <Text key={index} style={styles.value}>{cause}</Text>
+                ))}
+              </View>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>症状</Text>
+                <View style={styles.divider} />
+                {diagnosesDetail.symptoms && diagnosesDetail.symptoms.map((symptom, index) => (
+                  <Text key={index} style={styles.value}>{symptom}</Text>
+                ))}
+              </View>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>対処法</Text>
+                <View style={styles.divider} />
+                {diagnosesDetail.todo_list && diagnosesDetail.todo_list.map((todo, index) => (
+                  <Text key={index} style={styles.value}>{todo.description}</Text>
+                ))}
+              </View>
+              <View style={styles.card}>
+                <Button title="対処法をやることリストに登録する！" onPress={() => { get_todos( diagnosis.plant_id) }} color={"#68A98A"} />
+              </View>
+            </>
+          )
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
