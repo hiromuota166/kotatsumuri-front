@@ -1,21 +1,22 @@
 export type Todo = {
     task_id: number;
-    task_name: string;
-    description: string;
+    taskname: string;
+    discription: string;
     timing: string;
     priority: Priority;
     status: Status;
-    due_date: string;
+    duedate: string;
 }
 
-enum Priority {
+export enum Priority {
     High = "高い",
     Medium = "普通",
     Low = "低",
+    default = "No Data",
   }
 
-enum Status {
-    Done = "完了",
-    NotStarted = "未着手",
+export enum Status {
+    done = "完了",
+    notStarted = "未着手",
 }
   
