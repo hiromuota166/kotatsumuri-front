@@ -5,6 +5,7 @@ import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DiagnosesForm } from '../../../types/diagnosesForm';
 import { get_plant_regist } from '../../api/plant_regist';
+import {upload_image} from '../../api/diagnoses';
 import { RegisteredPlant } from '../../../types/plant';
 import { Picker } from '@react-native-picker/picker';
 import Selector from '../../../components/Selector';
@@ -16,17 +17,15 @@ const Diagnoses = () => {
   const vw = width / 100;
   const vh = height / 100;
   const router = useRouter();
-  const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
   const [diagnosesForm, setDiagnosesForm] = useState<DiagnosesForm | null>(null);
   const [registPlants, setRegistPlants] = useState<RegisteredPlant[] | null>([]);
-  const PlaceholderImage = require('../../../assets/images/react-logo.png');
   const [response, setResponse] = React.useState<any>(null);
 
   useEffect(() => {
     get_plant_regist().then((response) => {
       setRegistPlants(response);
     });
-  }, [diagnosesForm]);
+  }, []);
 
   const handleSelect = (field: keyof DiagnosesForm, value: any) => {
     setDiagnosesForm((prevForm) => ({
@@ -57,21 +56,30 @@ const Diagnoses = () => {
     });
   }
 
-  const onButtonPress = React.useCallback((options: any) => {
-      ImagePicker.launchImageLibrary(options, setResponse).then((response) => {
+  const onButtonPress = React.useCallback(async (options: any) => {
+      ImagePicker.launchImageLibrary(options, setResponse).then(async (response) => {
         if (response.didCancel) {
           console.log('User cancelled image picker');
         } else {
           if (response.assets){
-            setDiagnosesForm((prevForm) => ({
-              ...prevForm,
-              image: response.assets ? response.assets[0].uri : undefined,
-            } as DiagnosesForm));
+            if (response.assets[0].uri) {
+              const image_data = await upload_image(response.assets[0].uri)
+
+              setDiagnosesForm((prevForm) => ({
+                ...prevForm,
+                image_url: image_data,
+              } as DiagnosesForm));
+
+
+
+            } else {
+              Alert.alert('画像の取得に失敗しました');
+            }
           } else {
             Alert.alert('画像の取得に失敗しました');
           }
         }})
-  }, []);
+  }, [upload_image]);
 
 
 
@@ -96,7 +104,7 @@ const Diagnoses = () => {
               onValueChange={(itemValue, itemIndex) => {
                 setDiagnosesForm((prevForm) => ({
                   ...prevForm,
-                  plant_id: itemValue as string,
+                  plant_id: itemValue,
                   name: registPlants?.find((plant) => plant.id === itemValue)?.name || '',
                 } as DiagnosesForm));
               }}
@@ -193,17 +201,16 @@ const Diagnoses = () => {
           <View style={styles.section}>
             {/* <Image source={{ uri: response || PlaceholderImage }} style={{ width: 100, height: 100 }} /> */}
 
-                    {response?.assets &&
-          response?.assets.map(({uri}: {uri: string}) => (
-            <View key={uri} style={styles.imageContainer}>
-              <Image
-                resizeMode="cover"
-                resizeMethod="scale"
-                style={styles.image}
-                source={{uri: uri}}
-              />
-            </View>
-          ))}
+            {diagnosesForm?.image_url && (
+              <View style={styles.imageContainer}>
+                <Image
+                  resizeMode="cover"
+                  resizeMethod="scale"
+                  style={styles.image}
+                  source={{ uri: diagnosesForm.image_url }}
+                />
+              </View>
+            )}
                       <Button
               title="画像を選択"
               color={'#68A98A'}
@@ -215,7 +222,10 @@ const Diagnoses = () => {
           </View>
           <Button title="診断する!"
             color={'#68A98A'}
-           onPress={() =>  handleSubmit() } />
+           onPress={() =>  {
+            console.log(diagnosesForm?.image_url)
+            handleSubmit()}
+             } />
         </View>
       </ScrollView>
     </SafeAreaView>
