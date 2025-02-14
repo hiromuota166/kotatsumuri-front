@@ -16,9 +16,22 @@ const DiagnosesDetail = () => {
   const route = useRoute<DiagnosesDetailRouteProp>();
   const rawDiagnosis = route.params?.diagnosis;
   const diagnosis = JSON.parse(rawDiagnosis) as DiagnosesForm;
+  const [registTodo, setRegistTodo] = useState<boolean>(false);
 
   const [diagnosesDetail, setDiagnosesDetail] = useState<Diagnosis | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const handleCreateTodo = async () => { 
+    if (diagnosesDetail){    
+      const status = await post_todos( diagnosesDetail.todo_list, diagnosis.plant_id)
+      if (status == 200){
+        Alert.alert('登録しました');
+        setRegistTodo(true)
+      } else {
+        Alert.alert('登録に失敗しました');
+      }
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +51,7 @@ const DiagnosesDetail = () => {
           diagnosis.fertilizing_frequency,
           diagnosis.pesticide_history,
           diagnosis.recent_weather,
+          diagnosis.image_url
         );
         setDiagnosesDetail(response);
       } catch (error) {
@@ -48,7 +62,7 @@ const DiagnosesDetail = () => {
     };
 
     fetchData();
-  }, []);
+  }, [diagnosis.fertilizer_type, diagnosis.fertilizing_frequency, diagnosis.leaf_color, diagnosis.location, diagnosis.name, diagnosis.pesticide_history, diagnosis.plant_id, diagnosis.recent_weather, diagnosis.soil_type, diagnosis.stem_root_condition, diagnosis.sunlight, diagnosis.temperature, diagnosis.ventilation, diagnosis.watering_frequency]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFBF3' }}>
@@ -82,11 +96,15 @@ const DiagnosesDetail = () => {
                 <Text style={styles.cardTitle}>対処法</Text>
                 <View style={styles.divider} />
                 {diagnosesDetail.todo_list && diagnosesDetail.todo_list.map((todo, index) => (
-                  <Text key={index} style={styles.value}>{todo.description}</Text>
+                  <Text key={index} style={styles.value}>{todo.discription}</Text>
                 ))}
               </View>
               <View style={styles.card}>
-                <Button title="対処法をやることリストに登録する！" onPress={() => { get_todos( diagnosis.plant_id) }} color={"#68A98A"} />
+                {registTodo ? (
+                <Button title="登録済"  color={"gray"} />
+                ) : (
+                  <Button title="対処法をやることリストに登録する！" onPress={() => {handleCreateTodo } } color={"#68A98A"} />
+                )}
               </View>
             </>
           )
