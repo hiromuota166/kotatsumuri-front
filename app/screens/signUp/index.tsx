@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-    View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity,
+    View, Text, TextInput, StyleSheet, Image, TouchableOpacity,
     TouchableWithoutFeedback,
     Keyboard,
     Alert,
 } from 'react-native';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import * as SecureStore from 'expo-secure-store';
 const signUp = () => {
