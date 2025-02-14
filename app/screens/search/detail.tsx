@@ -74,6 +74,10 @@ const Detail = () => {
             <Text style={styles.feature}>耐寒レベル</Text>
             <Text style={styles.subtitle}>{data?.growth_conditions.hardiness_zone}</Text>
           </View>
+          <View style={styles.featureContainer}>
+            <Text style={styles.feature}>増やし方</Text>
+            <Text style={styles.subtitle}>{data?.propagation_methods.description}</Text>
+          </View>
 
           <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: '#ccc', paddingBottom: 8 }}>
             <Text style={{ flex: 1, fontWeight: 'bold' }}>時期</Text>
