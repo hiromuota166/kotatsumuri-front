@@ -17,6 +17,7 @@ export type DiagnosesForm = {
     fertilizing_frequency: string,
     pesticide_history: pesticide_history,
     recent_weather: string,
+    image_url: string,
 }
 
 
