@@ -102,23 +102,27 @@ const Home = () => {
       {/* Flower Sections */}
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 10 * vw,
           paddingBottom: 10 * vh,
         }}
       >
         {(selectedTab === 'ALL' ? tabs : [selectedTab]).map((tab) => (
-          <View key={tab} style={[styles.section, { marginVertical: 2 * vh }]}>
+          <View key={tab} style={[styles.section, { marginVertical: 2 * vh , paddingLeft: 5 * vw}]}>
             <Text style={styles.sectionTitle}>{tab}</Text>
             <ScrollView
               horizontal={true}
-              style={[styles.horizontalScroll, { paddingVertical: 2 * vh }]}
+              style={[styles.horizontalScroll, { paddingVertical: 2 * vh , paddingLeft: 5 * vw}]}
               showsHorizontalScrollIndicator={false}
             >
               {filterFlowersByTab(tab).map((flower) => (
                 <TouchableOpacity
                   key={flower.id}
                   style={[styles.flowerItem, { width: 20 * vw, marginRight: 8 * vw }]}
-                  onPress={() => router.push({ pathname: 'screens/home/detail', params: { data: JSON.stringify(flower.id) } })}
+                  onPress={() => {
+                    console.log(flower.id);
+                    router.push({
+                     pathname: 'screens/home/homeDetail', params: { data: flower.plant_id } 
+                    })} 
+                  }
                 >
                   <Image
                     source={{ uri: flower.image_url }}
