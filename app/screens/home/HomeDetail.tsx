@@ -1,29 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { plant, RegisteredPlant } from '../../../types/plant';
-import { Todo } from '../../../types/todo';
+import { Todo, Priority, Status } from '../../../types/todo';
 import { getPlant } from '../../api/searchPlant';
 import { get_todos } from '../../api/todo';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-type DetailRouteProp = RouteProp<{ params: { plantId: string } }, 'params'>;
+
+type DetailRouteProp = RouteProp<{ params: { data: string } }, 'params'>;
 
 const HomeDetail = () => {
   const route = useRoute<DetailRouteProp>();
-  const { plantId } = route.params;
+  const plantId = route.params?.data;
 
   const [plantDetails, setPlantDetails] = useState<plant | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const formatDate = (isoDate: string) => {
+    if (!isoDate.includes('T')) return isoDate; // ISO形式でない場合はそのまま返す
+    const date = new Date(isoDate);
+    return `${date.getMonth() + 1}月${date.getDate()}日`; // 月と日を取得
+  };
 
   useEffect(() => {
+    console.log('plantId:', plantId);
     const fetchData = async () => {
       try {
         const plantResponse = await getPlant(plantId);
-        setPlantDetails(plantResponse);
+        console.log('plantResponse:', plantResponse as plant);
+        console.log(plantResponse.growth_conditions.light)
+        setPlantDetails(plantResponse as plant);
 
         const todosResponse = await get_todos(plantId);
-        setTodos(todosResponse);
+        console.log('todosResponse:', todosResponse);
+        setTodos(todosResponse as Todo[]);
       } catch (error) {
         console.error('データの取得に失敗しました', error);
       } finally {
@@ -37,50 +48,71 @@ const HomeDetail = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#68A98A" />
         <Text>読み込み中...</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {plantDetails && (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFBF3' }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {plantDetails && (
+          <View style={styles.card}
+          key={plantDetails.id}
+          >
+            <Text style={styles.cardTitle}>{plantDetails.name}</Text>
+            <Text style={styles.cardDescription}>{plantDetails.description}</Text>
+            <View style={styles.divider} />
+            <Text style={styles.sectionTitle}>成長条件</Text>
+            <Text style={styles.value}>光: {plantDetails?.growth_conditions.light}</Text>
+            <Text style={styles.value}>土壌: {plantDetails?.growth_conditions.soil}</Text>
+            <Text style={styles.value}>耐寒ゾーン: {plantDetails?.growth_conditions.hardiness_zone}</Text>
+            <View style={styles.divider} />
+            <Text style={styles.sectionTitle}>ケア期間</Text>
+            {plantDetails?.care_periods.map((period, index) => (
+                        <View
+                          key={index}
+                          style={{
+                            flexDirection: 'row',
+                            borderBottomWidth: index === plantDetails?.care_periods.length - 1 ? 0 : 1,
+                            borderColor: '#eee',
+                            paddingVertical: 8,
+                          }}
+                        >
+                          <Text style={{ flex: 1 }}>
+                            {period.period_type === 'blooming_period'
+                              ? '開花期🌸'
+                              : period.period_type === 'pruning_period'
+                                ? '剪定期🍃'
+                                : period.period_type === 'planting_period'
+                                  ? '植付期🌱'
+                                  : period.period_type === 'fertilizing_period'
+                                    ? '肥料期🫘'
+                                    : period.period_type === 'repotting_period'
+                                      ? '植替期🪴'
+                                      : 'No Data'}
+                          </Text>
+                          <Text style={{ flex: 2,  marginLeft: 30 }}>{formatDate(period.start_date)}</Text>
+                          <Text style={{ flex: 2 }}>{formatDate(period.end_date)}</Text>
+                        </View>
+                      ))}
+          </View>
+        )}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>{plantDetails.name}</Text>
-          <Text style={styles.cardDescription}>{plantDetails.description}</Text>
-          <View style={styles.divider} />
-          <Text style={styles.sectionTitle}>成長条件</Text>
-          <Text style={styles.value}>光: {plantDetails.growth_conditions.light}</Text>
-          <Text style={styles.value}>土壌: {plantDetails.growth_conditions.soil}</Text>
-          <Text style={styles.value}>耐寒ゾーン: {plantDetails.growth_conditions.hardiness_zone}</Text>
-          <View style={styles.divider} />
-          <Text style={styles.sectionTitle}>ケア期間</Text>
-          {plantDetails.care_periods.map((period, index) => (
-            <View key={index} style={styles.carePeriod}>
-              <Text style={styles.value}>開始日: {period.start_date}</Text>
-              <Text style={styles.value}>終了日: {period.end_date}</Text>
-              <Text style={styles.value}>期間タイプ: {period.period_type}</Text>
+          <Text style={styles.cardTitle}>ToDoリスト</Text>
+          {todos?.map((todo) => (
+            <View key={todo.task_id} style={styles.todoItem}>
+              <Text style={styles.todoTitle}>{todo.taskname}</Text>
+              <Text style={styles.todoDescription}>{todo.discription}</Text>
+              <Text style={styles.todoValue}>優先度: {todo.priority}</Text>
+              <Text style={styles.todoValue}>ステータス: {todo.status}</Text>
+              <Text style={styles.todoValue}>期限: {todo.duedate}</Text>
             </View>
           ))}
         </View>
-      )}
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>ToDoリスト</Text>
-        <FlatList
-          data={todos}
-          keyExtractor={(item) => item.task_id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.todoItem}>
-              <Text style={styles.todoTitle}>{item.task_name}</Text>
-              <Text style={styles.todoDescription}>{item.description}</Text>
-              <Text style={styles.todoValue}>優先度: {item.priority}</Text>
-              <Text style={styles.todoValue}>ステータス: {item.status}</Text>
-              <Text style={styles.todoValue}>期限: {item.due_date}</Text>
-            </View>
-          )}
-        />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
