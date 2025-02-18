@@ -24,7 +24,7 @@ const DiagnosesDetail = () => {
   const handleCreateTodo = async () => { 
     if (diagnosesDetail){    
       const status = await post_todos( diagnosesDetail.todo_list, diagnosis.plant_id)
-      if (status == 200){
+      if (status === 201){
         Alert.alert('登録しました');
         setRegistTodo(true)
       } else {
@@ -96,14 +96,14 @@ const DiagnosesDetail = () => {
                 <Text style={styles.cardTitle}>対処法</Text>
                 <View style={styles.divider} />
                 {diagnosesDetail.todo_list && diagnosesDetail.todo_list.map((todo, index) => (
-                  <Text key={index} style={styles.value}>{todo.discription}</Text>
+                  <Text key={index} style={styles.value}>{todo.description}</Text>
                 ))}
               </View>
               <View style={styles.card}>
                 {registTodo ? (
                 <Button title="登録済"  color={"gray"} />
                 ) : (
-                  <Button title="対処法をやることリストに登録する！" onPress={() => {handleCreateTodo } } color={"#68A98A"} />
+                  <Button title="対処法をやることリストに登録する！" onPress={handleCreateTodo} color={"#68A98A"} />
                 )}
               </View>
             </>
