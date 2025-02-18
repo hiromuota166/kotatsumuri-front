@@ -1,11 +1,11 @@
 export type Todo = {
     task_id: number;
-    taskname: string;
-    discription: string;
+    task_name: string;
+    description: string;
     timing: string;
     priority: Priority;
     status: Status;
-    duedate: string;
+    due_date: string;
 }
 
 export enum Priority {

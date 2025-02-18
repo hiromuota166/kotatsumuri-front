@@ -103,11 +103,11 @@ const HomeDetail = () => {
           <Text style={styles.cardTitle}>ToDoリスト</Text>
           {todos?.map((todo) => (
             <View key={todo.task_id} style={styles.todoItem}>
-              <Text style={styles.todoTitle}>{todo.taskname}</Text>
-              <Text style={styles.todoDescription}>{todo.discription}</Text>
+              <Text style={styles.todoTitle}>{todo.task_name}</Text>
+              <Text style={styles.todoDescription}>{todo.description}</Text>
               <Text style={styles.todoValue}>優先度: {todo.priority}</Text>
               <Text style={styles.todoValue}>ステータス: {todo.status}</Text>
-              <Text style={styles.todoValue}>期限: {todo.duedate}</Text>
+              <Text style={styles.todoValue}>期限: {todo.due_date}</Text>
             </View>
           ))}
         </View>

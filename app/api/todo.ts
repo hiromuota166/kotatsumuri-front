@@ -5,12 +5,12 @@ import { Diagnosis } from "../../types/diagnoses";
 export async function post_todos(todos: [Todo], plant_id: string): Promise<number> {
     const response = await apiClient.post(`/todos/${plant_id}/plants/`, {
         todos: todos.map(todo => ({
-            taskname: todo.taskname,
-            discription: todo.discription,
+            task_name: todo.task_name,
+            description: todo.description,
             timing: todo.timing,
             priority: todo.priority,
             status: todo.status,
-            duedate: todo.duedate
+            due_date: todo.due_date
         }))
     });
     return response.status;
