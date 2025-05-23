@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  borderBottomColor: '#ccc',
     paddingBottom: 10,
   },
   label: {

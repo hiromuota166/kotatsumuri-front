@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { usePathname, useRouter, useSearchParams } from 'expo-router/build/hooks';
+import { useSearchParams } from 'expo-router/build/hooks';
 import { plant } from '../../../types/plant';
 import { searchPlant } from '../../api/searchPlant';
 import { post_plant_regist } from '../../api/plant_regist';

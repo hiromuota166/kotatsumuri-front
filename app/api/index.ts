@@ -6,7 +6,7 @@ import getIdTokenFromRefreshToken from "./refreshLogin";
 
 
 const apiClient = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:8080",
 });
 
 apiClient.interceptors.request.use(

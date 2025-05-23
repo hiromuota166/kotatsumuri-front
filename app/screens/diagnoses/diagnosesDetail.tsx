@@ -5,7 +5,7 @@ import { DiagnosesForm } from '../../../types/diagnosesForm';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { get_diagnoses } from '../../api/diagnoses';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { post_todos ,get_todos } from '../../api/todo';
+import { post_todos } from '../../api/todo';
 
 type RawParam = {
   diagnosis: string;
@@ -54,6 +54,7 @@ const DiagnosesDetail = () => {
           diagnosis.image_url
         );
         setDiagnosesDetail(response);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         Alert.alert('診断の取得に失敗しました');
       } finally {

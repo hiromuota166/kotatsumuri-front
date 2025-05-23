@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import getIdTokenFromRefreshToken from "./refreshLogin";
 
 const loginClient = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:8080",
 });
 
 export async function autoLogin(): Promise<boolean> {
@@ -23,7 +23,7 @@ export async function autoLogin(): Promise<boolean> {
             loginClient.defaults.headers.common['Authorization'] = `Bearer ${newIdToken}`;
             const response = await loginClient.get('users/login');
 
-            if (response.status == 200) {
+            if (response.status === 200) {
             return true;
             } else {
                 return false;
